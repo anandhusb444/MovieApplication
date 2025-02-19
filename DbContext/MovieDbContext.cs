@@ -1,0 +1,18 @@
+﻿using Microsoft.EntityFrameworkCore;
+using MovieApplication.Models;
+
+namespace MovieApplication
+{
+    public class MovieDbContext : Microsoft.EntityFrameworkCore.DbContext
+    {
+        public DbSet<Movie> Movies { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.HasDefaultSchema("app");
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(MovieDbContext).Assembly);
+
+            base.OnModelCreating(modelBuilder);
+        }
+    }
+}

@@ -51,6 +51,7 @@ namespace MovieApplication.Models
 
             if (releseDate > DateTimeOffset.UtcNow)
                 throw new ArgumentException("Relese date connot be in the future", nameof(releseDate));
+
             if (rating < 0 || rating > 10)
                 throw new ArgumentException("Rating  must be in between of 0 & 10", nameof(rating));
         }

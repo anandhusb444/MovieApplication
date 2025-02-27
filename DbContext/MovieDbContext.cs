@@ -5,6 +5,10 @@ namespace MovieApplication
 {
     public class MovieDbContext : Microsoft.EntityFrameworkCore.DbContext
     {
+        public MovieDbContext(DbContextOptions<MovieDbContext> options) : base(options)
+        {
+              
+        }
         public DbSet<Movie> Movies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

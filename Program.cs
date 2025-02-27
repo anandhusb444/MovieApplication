@@ -20,7 +20,7 @@ namespace MovieApplication
             {
                 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
                 options.UseNpgsql(connectionString);
-            })
+            });
            
 
             var app = builder.Build();
@@ -34,11 +34,6 @@ namespace MovieApplication
                 app.MapOpenApi();
                 app.MapScalarApiReference();
             }
-
-
-            
-
-
 
             app.UseHttpsRedirection();
 

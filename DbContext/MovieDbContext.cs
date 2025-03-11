@@ -20,17 +20,7 @@ namespace MovieApplication
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(MovieDbContext).Assembly);
 
 
-            modelBuilder.Entity<Movie>().HasData(
-                new Movie
-                {
-                    Id = Guid.NewGuid(),
-                    Title = "Inception",
-                    Genre = "Sci-Fi",
-                    ReleseDate = new DateTimeOffset(2010, 7, 16, 0, 0, 0, TimeSpan.Zero),
-                    Rating = 8.8,
-                    Created = DateTimeOffset.UtcNow,
-                    LastModifed = DateTimeOffset.UtcNow
-                },
+           
 
 
             base.OnModelCreating(modelBuilder);

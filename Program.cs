@@ -1,5 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
+using MovieApplication.EndPoints;
+using MovieApplication.Services;
 using Scalar.AspNetCore;
 
 namespace MovieApplication
@@ -21,9 +23,16 @@ namespace MovieApplication
                 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
                 options.UseNpgsql(connectionString);
             });
-           
+
+
+            builder.Services.AddTransient<IMovieService, MoviesService>();
 
             var app = builder.Build();
+
+            
+
+
+            
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -34,6 +43,10 @@ namespace MovieApplication
                 app.MapOpenApi();
                 app.MapScalarApiReference();
             }
+
+            app.MapMovieEndpoints();
+
+
 
             app.UseHttpsRedirection();
 

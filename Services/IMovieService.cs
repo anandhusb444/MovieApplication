@@ -117,7 +117,7 @@ namespace MovieApplication.Services
         {
             var movieToDelete = await _dbContext.Movies
                                     .FirstOrDefaultAsync(movie => movie.Id == id);
-            if(movieToDelete != )
+            if(movieToDelete != null)
             {
                 _dbContext.Movies.Remove(movieToDelete);
                 await _dbContext.SaveChangesAsync();

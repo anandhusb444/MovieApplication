@@ -7,19 +7,22 @@ namespace MovieApplication.EndPoints
     {
         public static void MapMovieEndpoints(this IEndpointRouteBuilder routes)
         {
-            routes.MapPost("/", async (IMovieService service, CreateMovieDTO command) =>
+            var movieApi = routes.MapGroup("/api/movies").WithTags("Movies");
+
+
+            movieApi.MapPost("/", async (IMovieService service, CreateMovieDTO command) =>
             {
                 var movie = await service.CreateMoviesAsync(command);
                 return Results.Created($"/api/movies/{movie.Id}", movie);
             }).WithTags("Movies");
 
-            routes.MapGet("/", async (IMovieService service) =>
+            movieApi.MapGet("/", async (IMovieService service) =>
             {
                 var movies = await service.GetAllMoviesAsync();
                 return Results.Ok(movies);
             }).WithTags("Movies");
 
-            routes.MapGet("/{id}", async (IMovieService service, Guid id) =>
+            movieApi.MapGet("/{id}", async (IMovieService service, Guid id) =>
             {
                 var movie = await service.GetMovieByIdAsync(id);
 
@@ -29,9 +32,20 @@ namespace MovieApplication.EndPoints
                 }
                 else
                 {
-                    TypedResults.Ok(movie);
+                    return TypedResults.Ok(movie);
                 }
+            });
 
+            movieApi.MapDelete("/{id}", async (IMovieService service, Guid id) =>
+            {
+                await service.DeleteMovieAsync(id);
+                return TypedResults.NoContent();
+            });
+
+            movieApi.MapPut("/{id}", async (IMovieService service, Guid id, MovisDto command) =>
+            {
+                await service.UpdateMovieAsync(id, command);
+                TypedResults.NoContent();
             });
 
         }

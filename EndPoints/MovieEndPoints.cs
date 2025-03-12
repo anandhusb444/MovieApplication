@@ -40,13 +40,20 @@ namespace MovieApplication.EndPoints
             {
                 await service.DeleteMovieAsync(id);
                 return TypedResults.NoContent();
+                //show respones in the API 
             });
 
             movieApi.MapPut("/{id}", async (IMovieService service, Guid id, MovisDto command) =>
             {
                 await service.UpdateMovieAsync(id, command);
                 TypedResults.NoContent();
+                //shoe respones API
             });
+
+            //-----------------------------------------IMPROVE---------------------------------------
+            // Add Generic respones
+            // Validate Case
+            //Test Case
 
         }
     }

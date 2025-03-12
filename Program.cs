@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MovieApplication.EndPoints;
 using MovieApplication.Services;
 using Scalar.AspNetCore;
+using Serilog;
 
 namespace MovieApplication
 {
@@ -14,23 +15,34 @@ namespace MovieApplication
 
             // Add services to the container.
 
+
+            // Configure Serilog to write logs to a file
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File("logs/app.log", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            builder.Logging.ClearProviders();
+            builder.Logging.AddSerilog();
+
+
+
+
+
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
             builder.Services.AddDbContext<MovieDbContext>(options =>
             {
-                var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+                var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");//Seting up connection string
                 options.UseNpgsql(connectionString);
             });
 
 
-            builder.Services.AddTransient<IMovieService, MoviesService>();
+            builder.Services.AddTransient<IMovieService, MoviesService>();//DL Injection
 
             var app = builder.Build();
-
-            
-
 
             
 

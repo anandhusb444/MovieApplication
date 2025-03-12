@@ -16,19 +16,23 @@ namespace MovieApplication.Services
 
     public class MoviesService : IMovieService
     {
+        
         private readonly MovieDbContext _dbContext;
         private readonly ILogger<MoviesService> _logger;
 
+        
         public MoviesService(MovieDbContext context, ILogger<MoviesService> log)
         {
             _dbContext = context;
             _logger = log;
         }
 
+        
         public async Task<MovisDto> CreateMoviesAsync(CreateMovieDTO command)
         {
             try
             {
+                _logger.LogInformation("Create Movie Started");
                 var movie = Movie.Create(command.Title, command.Genre, command.ReleaseDate, command.Rating);
 
                 await _dbContext.Movies.AddAsync(movie);

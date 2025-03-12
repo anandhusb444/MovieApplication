@@ -34,6 +34,8 @@ namespace MovieApplication.Services
                 await _dbContext.Movies.AddAsync(movie);
                 await _dbContext.SaveChangesAsync();
 
+                //chnage the time format , give more validation
+
 
                 return new MovisDto(movie.Id, movie.Title, movie.Genre, movie.ReleseDate, movie.Rating);
             }

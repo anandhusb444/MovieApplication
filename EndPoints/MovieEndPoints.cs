@@ -1,6 +1,5 @@
 ﻿using MovieApplication.DTOs;
 using MovieApplication.Services;
-using System.Runtime.CompilerServices;
 
 namespace MovieApplication.EndPoints
 {
@@ -8,17 +7,32 @@ namespace MovieApplication.EndPoints
     {
         public static void MapMovieEndpoints(this IEndpointRouteBuilder routes)
         {
-            routes.MapPost("/api/movies", async (IMovieService service, CreateMovieDTO command) =>
+            routes.MapPost("/", async (IMovieService service, CreateMovieDTO command) =>
             {
                 var movie = await service.CreateMoviesAsync(command);
                 return Results.Created($"/api/movies/{movie.Id}", movie);
             }).WithTags("Movies");
 
-            routes.MapGet("/api/movies", async (IMovieService service) =>
+            routes.MapGet("/", async (IMovieService service) =>
             {
                 var movies = await service.GetAllMoviesAsync();
                 return Results.Ok(movies);
             }).WithTags("Movies");
+
+            routes.MapGet("/{id}", async (IMovieService service, Guid id) =>
+            {
+                var movie = await service.GetMovieByIdAsync(id);
+
+                if (movie == null)
+                {
+                    return (IResult)TypedResults.NotFound(new { Message = $"Movie With ID {id} not found..." });
+                }
+                else
+                {
+                    TypedResults.Ok(movie);
+                }
+
+            });
 
         }
     }

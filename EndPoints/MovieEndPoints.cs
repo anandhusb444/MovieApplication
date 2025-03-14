@@ -1,4 +1,5 @@
 ﻿using MovieApplication.DTOs;
+using MovieApplication.Respones;
 using MovieApplication.Services;
 
 namespace MovieApplication.EndPoints
@@ -12,41 +13,94 @@ namespace MovieApplication.EndPoints
 
             movieApi.MapPost("/", async (IMovieService service, CreateMovieDTO command) =>
             {
-                var movie = await service.CreateMoviesAsync(command);
-                return Results.Created($"/api/movies/{movie.Id}", movie);
+                try
+                {
+                    var movie = await service.CreateMoviesAsync(command);
+                    var respones = new GenericRespones<object>(201, "Movie created successfuly", movie, null);
+                    return Results.Created($"/api/movies/{movie.Id}", respones);
+                }
+                catch(Exception ex)
+                {
+                    var errorRespones = new GenericRespones<object>(500, "Internal server error", null, ex.Message);
+                    return Results.Json(errorRespones, statusCode: 500);
+                }
+                
             }).WithTags("Movies");
 
             movieApi.MapGet("/", async (IMovieService service) =>
             {
-                var movies = await service.GetAllMoviesAsync();
-                return Results.Ok(movies);
+                try
+                {
+                    var movies = await service.GetAllMoviesAsync();
+                    var respones = new GenericRespones<object>(200, "Successfuly get all the respones", movies, null);
+
+                    return Results.Ok(respones);
+                }
+                catch(Exception ex)
+                {
+                    var errorRespones = new GenericRespones<object>(500, "Internal server error", null, ex.Message);
+                    return Results.Json(errorRespones, statusCode: 500);
+                }
+              
             }).WithTags("Movies");
 
             movieApi.MapGet("/{id}", async (IMovieService service, Guid id) =>
             {
-                var movie = await service.GetMovieByIdAsync(id);
+                try
+                {
+                    var movie = await service.GetMovieByIdAsync(id);
 
-                if (movie == null)
-                {
-                    return (IResult)TypedResults.NotFound(new { Message = $"Movie With ID {id} not found..." });
+                    if (movie != null)
+                    {
+                        var respones = new GenericRespones<object>(200, "Successfult get the Movie", movie, null);
+                        return TypedResults.Ok(respones);
+
+                        
+                    }
+                    else
+                    {
+                        var notFoundRespones = new GenericRespones<object>(400, $"Movie With ID {id} not found...", null, $"can't find the movie with Id {id}");
+                        return TypedResults.NotFound(notFoundRespones);
+                    }
                 }
-                else
+                catch(Exception ex)
                 {
-                    return TypedResults.Ok(movie);
+                    var errorRespones = new GenericRespones<object>(500, "Internal server error", null, ex.Message);
+                    return Results.Json(errorRespones, statusCode: 500);
                 }
+               
             });
 
             movieApi.MapDelete("/{id}", async (IMovieService service, Guid id) =>
             {
-                await service.DeleteMovieAsync(id);
-                return TypedResults.NoContent();
+                try
+                {
+                    await service.DeleteMovieAsync(id);
+                    return TypedResults.NoContent();
+                }
+                catch(Exception ex)
+                {
+                    var errorRespones = new GenericRespones<object>(500, "Internal server error", null, ex.Message);
+                    return Results.Json(errorRespones, statusCode: 500);
+                }
+               
                 //show respones in the API 
             });
 
             movieApi.MapPut("/{id}", async (IMovieService service, Guid id, MovisDto command) =>
             {
-                await service.UpdateMovieAsync(id, command);
-                TypedResults.NoContent();
+
+                try
+                {
+                    await service.UpdateMovieAsync(id, command);
+                    return TypedResults.NoContent();
+                }
+                catch(Exception ex)
+                {
+                    var errorRespones = new GenericRespones<object>(500, "Internal server error", null, ex.Message);
+                    return Results.Json(errorRespones, statusCode: 500);
+                }
+               
                 //shoe respones API
             });
 

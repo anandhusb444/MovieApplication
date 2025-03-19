@@ -40,7 +40,7 @@ namespace MovieApplication
             });
 
 
-            builder.Services.AddTransient<IMovieService, MoviesService>();//DL Injection
+            builder.Services.AddScoped<IMovieService, MoviesService>();//DL Injection
 
             var app = builder.Build();
 

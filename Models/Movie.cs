@@ -1,14 +1,19 @@
 ﻿
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace MovieApplication.Models
 {
     public class Movie : EntityBase
     {
+        [Key]
+        public Guid movie_Id { get; set; }
         public string Title { get; set; }
         public string Genre { get; set; }
+        public Guid director_Id { get; set;}
         public DateTimeOffset ReleseDate { get; set; }
-        public double Rating { get; set; }
+        public double Rating { get; set; } 
+        public ICollection<Commands> Commands { get; set; }
         public Movie()
         {
 

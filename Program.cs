@@ -56,7 +56,7 @@ namespace MovieApplication
                 app.MapScalarApiReference();
             }
 
-            app.MapMovieEndpoints();
+            //app.MapMovieEndpoints()
 
 
 

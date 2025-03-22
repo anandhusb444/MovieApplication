@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MovieApplication.Migrations
 {
     /// <inheritdoc />
-    public partial class initialCreate : Migration
+    public partial class InitCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,6 +32,24 @@ namespace MovieApplication.Migrations
                     table.PrimaryKey("PK_Movies", x => x.Id);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Users",
+                schema: "app",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    userName = table.Column<string>(type: "text", nullable: false),
+                    role = table.Column<string>(type: "text", nullable: false),
+                    email = table.Column<string>(type: "text", nullable: false),
+                    passwordHash = table.Column<string>(type: "text", nullable: false),
+                    createdAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    updateAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.id);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Movies_Title",
                 schema: "app",
@@ -44,6 +62,10 @@ namespace MovieApplication.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Movies",
+                schema: "app");
+
+            migrationBuilder.DropTable(
+                name: "Users",
                 schema: "app");
         }
     }

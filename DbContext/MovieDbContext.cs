@@ -11,6 +11,7 @@ namespace MovieApplication
               
         }
         public DbSet<Movie> Movies { get; set; }
+        public DbSet<Users> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -18,10 +19,6 @@ namespace MovieApplication
 
             modelBuilder.HasDefaultSchema("app");
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(MovieDbContext).Assembly);
-
-
-           
-
 
             base.OnModelCreating(modelBuilder);
         }

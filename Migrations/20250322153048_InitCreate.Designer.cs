@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MovieApplication.Migrations
 {
     [DbContext(typeof(MovieDbContext))]
-    [Migration("20250306165320_InitialDataWithHasData")]
-    partial class InitialDataWithHasData
+    [Migration("20250322153048_InitCreate")]
+    partial class InitCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,18 +61,39 @@ namespace MovieApplication.Migrations
                     b.HasIndex("Title");
 
                     b.ToTable("Movies", "app");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("01c681ed-278c-444c-b53c-917cefa3b02c"),
-                            Created = new DateTimeOffset(new DateTime(2025, 3, 6, 16, 53, 19, 566, DateTimeKind.Unspecified).AddTicks(3873), new TimeSpan(0, 0, 0, 0, 0)),
-                            Genre = "Fantasy",
-                            LastModifed = new DateTimeOffset(new DateTime(2025, 3, 6, 16, 53, 19, 566, DateTimeKind.Unspecified).AddTicks(3877), new TimeSpan(0, 0, 0, 0, 0)),
-                            Rating = 8.0,
-                            ReleseDate = new DateTimeOffset(new DateTime(2025, 3, 6, 16, 53, 19, 566, DateTimeKind.Unspecified).AddTicks(5564), new TimeSpan(0, 0, 0, 0, 0)),
-                            Title = "Sonic the hedgeh 3"
-                        });
+            modelBuilder.Entity("MovieApplication.Models.Users", b =>
+                {
+                    b.Property<Guid>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("createdAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("passwordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("role")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("updateAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("userName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Users", "app");
                 });
 #pragma warning restore 612, 618
         }

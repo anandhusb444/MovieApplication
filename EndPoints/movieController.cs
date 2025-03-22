@@ -101,7 +101,7 @@ namespace MovieApplication.EndPoints
             }
         }
 
-        [HttpDelete("/{id}")]
+        [HttpDelete("id")]
         public async Task<IActionResult> DeleteMovie(Guid id)
         {
             try

@@ -4,8 +4,6 @@ namespace MovieApplication.DTOs
 {
     public class UserDTO
     {
-        [Required]
-        public Guid Id { get; set; }
 
         [Required]  
         public string userName { get; set; }

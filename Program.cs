@@ -41,6 +41,7 @@ namespace MovieApplication
 
 
             builder.Services.AddScoped<IMovieService, MoviesService>();//DL Injection
+            builder.Services.AddScoped<IuserServices, UserServies>();
 
             var app = builder.Build();
 

@@ -35,12 +35,13 @@ namespace MovieApplication.Services
                 _logger.LogInformation("Create Movie Started");
                 var movie = Movie.Create(command.Title, command.Genre, command.ReleaseDate, command.Rating);
 
+                if (movie == null)
+                    return null;
+
                 await _dbContext.Movies.AddAsync(movie);
                 await _dbContext.SaveChangesAsync();
 
-                //chnage the time format , give more validation
-
-
+                //chnage the time format , give more 
                 return new MovisDto(movie.Id, movie.Title, movie.Genre, movie.ReleseDate, movie.Rating);
             }
             catch (Exception ex)

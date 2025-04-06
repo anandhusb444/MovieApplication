@@ -10,7 +10,7 @@ namespace MovieApplication.Services
     {
         //Task<IEnumerable<Users>> GetAlluser();
         //Task<Users> GetUserById(Guid id);
-        Task<bool> UserRegister();
+        Task<bool> UserRegister(UserDTO userDto);
         //Task<bool> UserLogin();
         //Task<bool> Block_User();
         //Task<bool> Unblock_User();
@@ -21,26 +21,52 @@ namespace MovieApplication.Services
     {
         private readonly MovieDbContext _dbContext;
 
+        public UserServies(MovieDbContext context)
+        {
+            _dbContext = context;
+        }
+
         public async Task<bool> UserRegister(UserDTO usersDto)
         {
             try
             {
-                var isUserExit = await _dbContext.Users.FirstOrDefaultAsync(u => u.email == usersDto.userEmail);
+                if (usersDto == null)
+                    throw new ArgumentNullException(nameof(usersDto));
 
-                if(isUserExit == null)
+                var isUserExist = await _dbContext.Users.FirstOrDefaultAsync(u => u.email == usersDto.userEmail);
+
+                if (isUserExist == null)
                 {
                     var salt = BCrypt.Net.BCrypt.GenerateSalt();
                     var hashPassword = BCrypt.Net.BCrypt.HashPassword(usersDto.password, salt);
-                    var addUser = new Users() { userName = usersDto.userName, email = usersDto.userEmail, passwordHash = usersDto.password };
 
+                    var addUser = new Users()
+                    {
+                        userName = usersDto.userName,
+                        email = usersDto.userEmail,
+                        passwordHash = hashPassword,
+                        role = "user", // or from usersDto
+                        createdAt = DateTimeOffset.UtcNow,
+                        updateAt = DateTimeOffset.UtcNow
+                    };
+
+                    await _dbContext.Users.AddAsync(addUser);
+                    await _dbContext.SaveChangesAsync();
+                    return true;
                 }
-            }
-            catch(Exception ex)
-            {
 
-                throw;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                if (ex.InnerException != null)
+                    Console.WriteLine("Inner: " + ex.InnerException.Message);
+
+                return false;
             }
         }
+
 
 
     }

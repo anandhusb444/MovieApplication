@@ -11,7 +11,7 @@ namespace MovieApplication.Services
         //Task<IEnumerable<Users>> GetAlluser();
         //Task<Users> GetUserById(Guid id);
         Task<bool> UserRegister(UserDTO userDto);
-        //Task<bool> UserLogin();
+        Task<bool> UserLogin(UserDTO userDto);
         //Task<bool> Block_User();
         //Task<bool> Unblock_User();
         //Task<bool> Delete_User();
@@ -67,6 +67,26 @@ namespace MovieApplication.Services
             }
         }
 
+        public async Task<bool> UserLogin(UserDTO userDto)
+        {
+            try
+            {
+                var userDetails = await _dbContext.Users.FirstOrDefaultAsync(user => user.email == userDto.userEmail);
+
+                if (userDetails == null)
+                    return false;
+
+                //do the rest of the thing...
+                return true;
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
 
 
     }

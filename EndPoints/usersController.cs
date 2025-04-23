@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MovieApplication.DTOs;
 using MovieApplication.Respones;
 using MovieApplication.Services;
+using System.Runtime.InteropServices;
 
 namespace MovieApplication.EndPoints
 {
@@ -54,7 +55,8 @@ namespace MovieApplication.EndPoints
                 }
                 else
                 {
-                    return BadRequest(user);
+                    var respones = new GenericRespones<object>(401,"Failed",user,"Wrong password or user not found");
+                    return BadRequest(respones);
                 }
             }
             catch(Exception ex)

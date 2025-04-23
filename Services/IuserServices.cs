@@ -76,10 +76,13 @@ namespace MovieApplication.Services
                 if (userDetails == null)
                     return false;
 
+                bool userPassword = BCrypt.Net.BCrypt.Verify(userDto.password, userDetails.passwordHash);
+
+                if (!userPassword)
+                    return false;
+                      
                 //do the rest of the thing...
                 return true;
-
-
             }
             catch (Exception ex)
             {

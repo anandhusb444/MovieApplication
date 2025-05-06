@@ -43,9 +43,26 @@ namespace MovieApplication
             builder.Services.AddScoped<IMovieService, MoviesService>();//DL Injection
             builder.Services.AddScoped<IuserServices, UserServies>();
 
+
+            builder.Services.AddCors(option =>
+            {
+                option.AddPolicy("AllowReactApp", policy =>
+                {
+                    policy.WithOrigins("http://localhost:5177")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+                });
+            });
+
+
+
+
+
             var app = builder.Build();
 
-            
+         
+
+            app.UseCors("AllowReactApp");
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -54,10 +71,13 @@ namespace MovieApplication
                     .Produces(200, typeof(string));
 
                 app.MapOpenApi();
+
                 app.MapScalarApiReference();
             }
 
             //app.MapMovieEndpoints()
+
+            
 
 
 

@@ -15,7 +15,7 @@ namespace MovieApplication.EndPoints
 
         public usersController(IuserServices services)
         {
-            _userServices = services;
+              _userServices = services;
         }
 
         [HttpPost("register")]

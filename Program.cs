@@ -1,9 +1,11 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MovieApplication.EndPoints;
 using MovieApplication.Services;
 using Scalar.AspNetCore;
 using Serilog;
+using System.Text;
 
 namespace MovieApplication
 {
@@ -54,8 +56,20 @@ namespace MovieApplication
                 });
             });
 
-
-
+            builder.Services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", option =>
+                {
+                    option.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = "movieApi",
+                        ValidAudience = "movieApiUser",
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                    };
+                });
 
 
             var app = builder.Build();
@@ -82,6 +96,8 @@ namespace MovieApplication
 
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

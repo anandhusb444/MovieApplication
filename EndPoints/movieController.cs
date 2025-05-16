@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.Json;
 using MovieApplication.DTOs;
@@ -7,6 +8,7 @@ using MovieApplication.Services;
 
 namespace MovieApplication.EndPoints
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class movieController : ControllerBase

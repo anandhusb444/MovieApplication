@@ -48,7 +48,7 @@ namespace MovieApplication.EndPoints
             {
                 var user = await _userServices.UserLogin(userDto);
 
-                if(user)
+                if(user.IsAuthenticated)
                 {
                     var respones = new GenericRespones<object>(200, "Sucess", user, null);
                     return Ok(respones);

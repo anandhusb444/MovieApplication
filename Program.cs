@@ -1,7 +1,9 @@
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MovieApplication.EndPoints;
+using MovieApplication.Models;
 using MovieApplication.Services;
 using Scalar.AspNetCore;
 using Serilog;
@@ -55,6 +57,17 @@ namespace MovieApplication
                     .AllowAnyMethod();
                 });
             });
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
+            {
+                option.Password.RequireDigit = true;
+                option.Password.RequiredLength = 6;
+                option.Password.RequireNonAlphanumeric = false;
+            })
+                .AddEntityFrameworkStores<MovieDbContext>()
+                .AddDefaultTokenProviders();
+
+
 
             builder.Services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", option =>

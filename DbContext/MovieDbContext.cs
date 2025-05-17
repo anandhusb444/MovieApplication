@@ -1,17 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MovieApplication.Models;
 
-namespace MovieApplication
+namespace MovieApplication  
 {
-    public class MovieDbContext : Microsoft.EntityFrameworkCore.DbContext
+    public class MovieDbContext : IdentityDbContext<ApplicationUser>
     {
         public MovieDbContext(DbContextOptions<MovieDbContext> options) : base(options)
         {
               
         }
         public DbSet<Movie> Movies { get; set; }
-        public DbSet<Users> Users { get; set; }
         public DbSet<Commands> Commands { get; set; }
 
 

@@ -22,18 +22,18 @@ namespace MovieApplication.Services
     public class UserServies:IuserServices
     {
         private readonly MovieDbContext _dbContext;
-
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
-        private readonly JwtTokenService _jwtTokenService;
+        private readonly IjwtTokenServices _jwtTokenServices;
 
-        public UserServies(MovieDbContext context,UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager, IConfiguration config)
+        public UserServies(MovieDbContext context,UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager, IConfiguration config,IjwtTokenServices jwtTokenServies)
         {
             _dbContext = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = config;
+            _jwtTokenServices = jwtTokenServies;
         }
 
         public async Task<bool> UserRegister(UserDTO usersDto)
@@ -86,7 +86,7 @@ namespace MovieApplication.Services
         {
             try
             {
-                JwtTokenService jwtTokenService = new JwtTokenService(_configuration);
+                
                 AuthanicationModel authModel = new AuthanicationModel();
 
                 var userDetails = await _userManager.FindByEmailAsync(userDto.userEmail);
@@ -108,7 +108,7 @@ namespace MovieApplication.Services
                 }
 
                 var roles = await _userManager.GetRolesAsync(userDetails);
-                var token = _jwtTokenService.GenerateToken(userDetails, roles);
+                var token = _jwtTokenServices.GenerateToken(userDetails, roles);
 
                 authModel.IsAuthenticated = true;
                 authModel.Token = token;

@@ -46,6 +46,7 @@ namespace MovieApplication
 
             builder.Services.AddScoped<IMovieService, MoviesService>();//DL Injection
             builder.Services.AddScoped<IuserServices, UserServies>();
+            builder.Services.AddScoped<IjwtTokenServices, JwtTokenServices>();
 
 
             builder.Services.AddCors(option =>
@@ -68,7 +69,6 @@ namespace MovieApplication
                 .AddDefaultTokenProviders();
 
 
-
             builder.Services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", option =>
                 {
@@ -81,8 +81,12 @@ namespace MovieApplication
                         ValidIssuer = "movieApi",
                         ValidAudience = "movieApiUser",
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                        
                     };
                 });
+
+            
+
 
 
             var app = builder.Build();

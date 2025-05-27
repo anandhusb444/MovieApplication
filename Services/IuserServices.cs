@@ -4,6 +4,7 @@ using MovieApplication.Models;
 using BCrypt.Net;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Identity;
+using MovieApplication.Respones;
 
 
 namespace MovieApplication.Services
@@ -12,7 +13,7 @@ namespace MovieApplication.Services
     {
         //Task<IEnumerable<Users>> GetAlluser();
         //Task<Users> GetUserById(Guid id);
-        Task<bool> UserRegister(UserDTO userDto);
+        Task<GenericRespones<bool>> UserRegister(UserDTO userDto);
         Task<AuthanicationModel> UserLogin(UserDTO userDto);
         //Task<bool> Block_User();
         //Task<bool> Unblock_User();
@@ -36,7 +37,7 @@ namespace MovieApplication.Services
             _jwtTokenServices = jwtTokenServies;
         }
 
-        public async Task<bool> UserRegister(UserDTO usersDto)
+        public async Task<GenericRespones<bool>> UserRegister(UserDTO usersDto)
         {
             try
             {
@@ -47,7 +48,7 @@ namespace MovieApplication.Services
 
 
                 if (isUserExists != null)
-                    return false;
+                    return new GenericRespones<bool>(400,"user alreay exist",false,null);
 
                 var salt = BCrypt.Net.BCrypt.GenerateSalt();
                 var hashPassword = BCrypt.Net.BCrypt.HashPassword(usersDto.password, salt);
@@ -65,11 +66,17 @@ namespace MovieApplication.Services
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(addUser, "User");
-                    return true;
+                    return new GenericRespones<bool>(200, "User Register Done", true, null);
                 }
                 else
                 {
-                    return false;
+                    string errorDescription = string.Empty;
+                    foreach (var error in result.Errors)
+                    {
+                        errorDescription = error.Description;// <- this includes password policy errors
+                    }
+
+                    return new GenericRespones<bool>(400, "User Registeration Failed", false, errorDescription);
                 }
             }
             catch (Exception ex)
@@ -78,7 +85,7 @@ namespace MovieApplication.Services
                 if (ex.InnerException != null)
                     Console.WriteLine("Inner: " + ex.InnerException.Message);
 
-                return false;
+                return new GenericRespones<bool>(500,"Internal server issue",false,"Failed");
             }
         }
 

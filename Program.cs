@@ -53,11 +53,16 @@ namespace MovieApplication
             {
                 option.AddPolicy("AllowReactApp", policy =>
                 {
-                    policy.WithOrigins("http://localhost:5177")
+                    policy.WithOrigins("http://127.0.0.1:5500")
                     .AllowAnyHeader()
                     .AllowAnyMethod();
                 });
             });
+
+            //http://127.0.0.1:5500 html/css register path
+            //http://localhost:5177 react resgister path
+
+
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(option =>
             {

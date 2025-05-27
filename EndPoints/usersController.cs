@@ -21,24 +21,14 @@ namespace MovieApplication.EndPoints
         [HttpPost("register")]
         public async Task<IActionResult> PostUsers(UserDTO userDto)
         {
-            try
+            var user = await _userServices.UserRegister(userDto);
+
+            if(user.data)
             {
-                var user = await _userServices.UserRegister(userDto);
-                if(user)
-                {
-                    var respones = new GenericRespones<object>(200, "Sucess", user, null);
-                    return Ok(respones);
-                }
-                else
-                {
-                    return BadRequest(user);    
-                }
+                return Ok(user);
             }
-            catch(Exception ex)
-            {
-                var errorRespones = new GenericRespones<object>(500, "Internal server error", null, ex.Message);
-                return StatusCode(500, errorRespones);
-            }
+
+            return BadRequest(user);
         }
 
         [HttpPost("Login")]
